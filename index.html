@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Review Time!!!</title>
+
+<style>
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #fff1f7, #e9f5ff);
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    color: #444;
+  }
+
+  h1 {
+    text-align: center;
+    color: #ff6fa1;
+  }
+
+  .game-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+
+  .scenario {
+    font-size: 1.2em;
+    color: #5b4eff;
+    margin-bottom: 6px;
+  }
+
+  .scenario-zh {
+    font-size: 0.95em;
+    color: #888;
+    margin-bottom: 20px;
+  }
+
+  .choice {
+    background: #f3f0ff;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 1.05em;
+  }
+
+  .choice:hover {
+    background: #e4ddff;
+    transform: scale(1.02);
+  }
+
+  .correct {
+    background: #d9f8df !important;
+  }
+
+  .wrong {
+    background: #ffdede !important;
+  }
+
+  button {
+    background: #ff9ecf;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 22px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto 0;
+    font-size: 1em;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Review Time</h1>
+<p style="text-align:center;">Choose what you would say in real life.</p>
+
+<div class="game-box" id="game">
+  <div class="scenario" id="scenario"></div>
+  <div class="scenario-zh" id="scenarioZh"></div>
+  <div id="choices"></div>
+  <button id="nextBtn" onclick="nextScene()" style="display:none;">Next ➜</button>
+</div>
+
+<script>
+const scenes = [
+  {
+    en: "📱 You meet a friend you haven’t seen in a while. What do you say?",
+    zh: "📱 你遇到一个很久没见的朋友，你会说什么？",
+    options: [
+      { text: "How’s it going?", correct: true },
+      { text: "I’ll be there soon.", correct: false },
+      { text: "Let me know.", correct: false }
+    ]
+  },
+  {
+    en: "☕ Your friend asks about your recent life.",
+    zh: "☕ 朋友问你最近在做什么。",
+    options: [
+      { text: "What have you been up to?", correct: true },
+      { text: "I mean it.", correct: false },
+      { text: "Sounds good to me.", correct: false }
+    ]
+  },
+  {
+    en: "🍕 Your friend suggests getting pizza for dinner.",
+    zh: "🍕 朋友建议晚餐吃披萨。",
+    options: [
+      { text: "Sounds good to me.", correct: true },
+      { text: "I’m on my way.", correct: false },
+      { text: "Take your time.", correct: false }
+    ]
+  },
+  {
+    en: "🚗 You just left your house and text your friend.",
+    zh: "🚗 你刚出门，给朋友发消息。",
+    options: [
+      { text: "I’m on my way.", correct: true },
+      { text: "That makes sense.", correct: false },
+      { text: "It’s not a big deal.", correct: false }
+    ]
+  },
+  {
+    en: "⏰ Your friend apologizes for being late.",
+    zh: "⏰ 朋友为迟到向你道歉。",
+    options: [
+      { text: "Take your time. No worries.", correct: true },
+      { text: "I’ll think about it.", correct: false },
+      { text: "Let me know.", correct: false }
+    ]
+  },
+  {
+    en: "🤝 Your friend explains something clearly.",
+    zh: "🤝 朋友把事情解释得很清楚。",
+    options: [
+      { text: "That makes sense.", correct: true },
+      { text: "I’ll be there soon.", correct: false },
+      { text: "I mean it.", correct: false }
+    ]
+  },
+  {
+    en: "😌 Someone worries about a small mistake.",
+    zh: "😌 有人为一个小错误感到担心。",
+    options: [
+      { text: "It’s not a big deal.", correct: true },
+      { text: "What have you been up to?", correct: false },
+      { text: "Sounds good to me.", correct: false }
+    ]
+  }
+];
+
+let current = 0;
+
+function loadScene() {
+  document.getElementById("nextBtn").style.display = "none";
+  const scene = scenes[current];
+  document.getElementById("scenario").innerText = scene.en;
+  document.getElementById("scenarioZh").innerText = scene.zh;
+
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
+
+  scene.options.forEach(option => {
+    const div = document.createElement("div");
+    div.className = "choice";
+    div.innerText = option.text;
+    div.onclick = () => select(div, option.correct);
+    choicesDiv.appendChild(div);
+  });
+}
+
+function select(element, correct) {
+  const all = document.querySelectorAll(".choice");
+  all.forEach(c => c.onclick = null);
+
+  element.classList.add(correct ? "correct" : "wrong");
+  document.getElementById("nextBtn").style.display = "block";
+}
+
+function nextScene() {
+  current++;
+  if (current < scenes.length) {
+    loadScene();
+  } else {
+    document.getElementById("game").innerHTML = `
+      <h2>🎉 Great job!</h2>
+      <p>You practiced real-world English phrases.</p>
+      <button onclick="location.reload()">Play Again</button>
+    `;
+  }
+}
+
+loadScene();
+</script>
+
+</body>
+</html>
